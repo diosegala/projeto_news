@@ -5,14 +5,6 @@ from src.auth import require_login_ui
 from src.config import Config
 from src.newsletter_generator import NewsletterGenerator
 
-st.write("🔍 Debug - Keys disponíveis:")
-st.write(list(st.secrets.keys()))
-
-st.write("\n🔑 Verificando valores:")
-st.write("OPENAI_API_KEY começa com 'sk-'?", st.secrets["OPENAI_API_KEY"].startswith("sk-"))
-st.write("OPENAI_API_KEY tem conteúdo?", len(st.secrets["OPENAI_API_KEY"]) > 0)
-st.write("GOOGLE_API_KEY começa com 'AIza'?", st.secrets["GOOGLE_API_KEY"].startswith("AIza"))
-st.write("GOOGLE_API_KEY tem conteúdo?", len(st.secrets["GOOGLE_API_KEY"]) > 0)
 
 # Configuração da página
 st.set_page_config(
