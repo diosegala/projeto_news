@@ -21,6 +21,9 @@ openai>=1.0.0
 google-api-python-client>=2.100.0
 google-auth>=2.22.0
 google-auth-httplib2>=0.2.0
+google-auth-oauthlib
+google-auth
+google-api-python-client
 
 # Async (se você usa de fato)
 aiohttp>=3.8.0
