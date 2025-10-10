@@ -194,4 +194,4 @@ Sinta-se à vontade para abrir issues e PRs. Sugestões:
 * melhorar prompts/estilo (em `style_guide.md`),
 * adicionar provedores de IA,
 * exportar em outros formatos (ex.: PDF/HTML),
-* autenticação mais robusta (OAuth do usuário) — **opcional** para o seu caso.
+* autenticação mais robusta (OAuth do usuário) — **opcional** para o seu caso.# newsletter-ia-streamlit
