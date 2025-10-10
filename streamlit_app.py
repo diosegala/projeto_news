@@ -5,7 +5,8 @@ from src.auth import require_login_ui
 from src.config import Config
 from src.newsletter_generator import NewsletterGenerator
 
-
+st.write("🔍 Debug - Keys disponíveis:")
+st.write(list(st.secrets.keys()))
 
 # Configuração da página
 st.set_page_config(
