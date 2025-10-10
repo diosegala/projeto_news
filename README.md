@@ -1,7 +1,3 @@
-perfeito — aqui está um **README.md completo**, já no seu contexto (Streamlit Cloud, Service Account, pasta em Drive Compartilhado, sem OAuth local). Está em **pt-BR** e pronto pra colar no repositório.
-
----
-
 # README.md
 
 ```markdown
