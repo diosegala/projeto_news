@@ -56,10 +56,11 @@ def main():
 
 def display_sidebar_info():
     """Exibe informações de configuração na sidebar"""
-    config = Config()
     st.sidebar.markdown("### 🔑 Status das APIs")
-    st.sidebar.write("OpenAI:", "✅" if config.OPENAI_API_KEY else "❌")
-    st.sidebar.write("Google (Gemini):", "✅" if config.GOOGLE_API_KEY else "❌")
+    st.sidebar.write("OpenAI:", "✅" if Config.OPENAI_API_KEY else "❌")
+    st.sidebar.write("Google (Gemini):", "✅" if Config.GOOGLE_API_KEY else "❌")
+    # Para sa_configured ainda precisa de instância se for método de instância
+    config = Config()
     st.sidebar.write("Google Docs:", "✅" if config.sa_configured() else "❌")
 
 def handle_newsletter_structure():
