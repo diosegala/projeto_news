@@ -1,0 +1,71 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+.build/
+dist/
+build/
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.coverage*
+htmlcov/
+
+# --- Virtualenvs ---
+.venv/
+venv/
+.env
+.env.*
+
+# --- OS / IDE ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- Streamlit ---
+# NUNCA versionar secrets reais
+.streamlit/secrets.toml
+
+# Se quiser manter config.toml versionado, não ignore a pasta inteira
+# .streamlit/
+
+# --- Dados locais / temporários ---
+# Ajuste conforme seu uso; mantenha apenas arquivos de exemplo
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+data/*.lock
+data/*.log
+*.log
+*.tmp
+*.bak
+
+# Se NÃO quiser commitar bancos/usuários locais, deixe ativo:
+# data/users.json
+# data/db.json
+
+# --- Cache / Downloads / Scraping ---
+.trafilatura-cache/
+.trafilatura/
+.cache_trafilatura/
+__downloads__/
+downloads/
+tmp/
+temp/
+
+# --- Notebooks (se usar) ---
+.ipynb_checkpoints/
+
+# --- Misc ---
+# Arquivos de credenciais antigas (OAuth etc.) — não versionar
+credentials.json
+token.json
+tokens/
+.tokens/

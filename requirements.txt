@@ -1,0 +1,26 @@
+# Core
+streamlit>=1.30.0
+tinydb>=4.8.0
+requests>=2.31.0
+
+# Content extraction
+trafilatura>=1.6.0
+beautifulsoup4>=4.12.0
+pdfminer.six>=20221105
+lxml>=4.9.0
+
+# Document processing
+python-docx>=0.8.11
+mammoth>=1.4.0
+
+# AI (Gemini prioritário)
+google-generativeai>=0.3.0
+openai>=1.0.0
+
+# Google APIs (Service Account only)
+google-api-python-client>=2.100.0
+google-auth>=2.22.0
+google-auth-httplib2>=0.2.0
+
+# Async (se você usa de fato)
+aiohttp>=3.8.0
