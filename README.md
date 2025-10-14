@@ -24,7 +24,7 @@ Gere uma newsletter a partir de links de notícias. O app:
 ## 🗂 Estrutura de pastas (sugerida)
 ```
 
-.
+
 ├─ streamlit_app.py                 # entrypoint do Streamlit
 ├─ src/
 │  ├─ config.py                     # configurações (lidas APENAS de st.secrets)
@@ -42,31 +42,27 @@ Gere uma newsletter a partir de links de notícias. O app:
 │  └─ style_guide.md                # guia de estilo para a escrita
 ├─ .streamlit/
 │  ├─ config.toml                   # (opcional) tema/layout
-│  └─ secrets.toml                  # (NÃO versionar)
+│  └─ secrets.toml                 
 ├─ requirements.txt
 └─ README.md
 
-````
-
-> Se você tinha versões antigas (`ai_service.py`, `structured_prompt.py`, etc.), mantenha fora do repositório ou remova.
 
 ---
 
 ## 🔐 Configuração de segredos (obrigatório)
 
 No **Streamlit Cloud**, vá em **App → Settings → Secrets** e cole seu `secrets.toml`.  
-Localmente, crie um arquivo **`.streamlit/secrets.toml`** (não comite).
+Localmente, crie um arquivo **`.streamlit/secrets.toml`**.
 
 ### Exemplo de `secrets.toml`  
-> ⚠️ Exemplo didático — **não coloque chaves reais** no repositório.
+> ⚠️ **Não coloque chaves reais** no repositório.
 
-```toml
 # Título padrão do Google Doc
 GDOC_TITLE = "Newsletter Imobi Report"
 
 # Pasta de DESTINO: deve ser uma pasta DENTRO de um Drive Compartilhado
 # (copie o ID da URL da pasta: https://drive.google.com/drive/folders/<ID_AQUI>)
-GDRIVE_FOLDER_ID = "1In0t_AJ35XHmPeJ_NX6yc_Ki7LD1MrNx"
+GDRIVE_FOLDER_ID = "Insira seu ID aqui"
 
 # Service Account (formato BLOCO TOML)
 [GOOGLE_SERVICE_ACCOUNT]
@@ -115,7 +111,7 @@ User-Agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, como Ge
   * `supportsAllDrives=True`
 
 > Dica: se aparecer `storageQuotaExceeded`, é porque a criação caiu no “Meu Drive” do SA. Garanta que:
->
+
 > 1. `GDRIVE_FOLDER_ID` é mesmo **de uma pasta do Shared Drive** (não um atalho), e
 > 2. o SA tem **Content manager** no Shared Drive.
 
@@ -137,7 +133,6 @@ streamlit run streamlit_app.py
 
 > Certifique-se de ter o `.streamlit/secrets.toml` local.
 
-
 ---
 
 ## 🧪 Como funciona (resumo técnico)
@@ -149,30 +144,6 @@ streamlit run streamlit_app.py
 * `google_docs_service.py` cria o documento dentro da pasta (`parents=[GDRIVE_FOLDER_ID]`) e escreve via `documents().batchUpdate(...)`.
 * `auth.py` provê login básico no app (TinyDB).
 * `streamlit_app.py` orquestra a UI.
-
----
-
-## 🛠 Troubleshooting
-
-**`GOOGLE_SERVICE_ACCOUNT ausente/ inválido`**
-
-* Use **bloco TOML** para o SA (como no exemplo).
-* Verifique se `private_key` tem **quebras reais** e headers corretos.
-
-**`storageQuotaExceeded` ao criar o Doc**
-
-* Quase sempre é criação no **“Meu Drive”** do SA.
-* Use **pasta de Shared Drive** em `GDRIVE_FOLDER_ID` e mantenha `supportsAllDrives=True`.
-* Garanta permissão **Content manager** do SA no Shared Drive.
-
-**`File not found: 0A...`**
-
-* IDs iniciados com `0A` são de **Shared Drive (driveId)**, não de arquivo/pasta.
-* Para checar o drive use `drives().get`; para `files().get`, passe o **ID de pasta** (ex.: `folders/<id>` na URL).
-
-**Link do Doc não abre como botão**
-
-* Use `st.link_button("📂 Abrir no Google Docs", url)` ou Markdown `[📂 Abrir no Google Docs](url)`.
 
 
 ---
