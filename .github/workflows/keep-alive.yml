@@ -2,28 +2,29 @@ name: Keep Streamlit App Alive
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 */6 * * *'  # A cada 6 horas
   workflow_dispatch:
 
 jobs:
-  ping-app:
+  wake-app:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Streamlit App
+      - name: Wake up Streamlit App
         run: |
-          echo "🔄 Pingando app Streamlit..."
-          response=$(curl -s -o /dev/null -w "%{http_code}" https://projetonews-cupola.streamlit.app/)
+          echo "🔄 Acordando app Streamlit..."
+          
+          # Faz requisição completa seguindo redirects
+          response=$(curl -L -s -o /dev/null -w "%{http_code}" \
+            -H "User-Agent: Mozilla/5.0" \
+            --max-time 30 \
+            https://projetonews-cupola.streamlit.app/)
+          
           echo "📡 Status code: $response"
           
-          if [ $response -eq 200 ] || [ $response -eq 301 ] || [ $response -eq 302 ] || [ $response -eq 303 ]; then
-            echo "✅ App está acordado e respondendo!"
+          if [ $response -ge 200 ] && [ $response -lt 400 ]; then
+            echo "✅ App acordado com sucesso!"
           else
-            echo "⚠️ App retornou status inesperado: $response"
+            echo "⚠️ Status inesperado: $response"
           fi
           
-          echo "✅ Ping concluído em $(date)"
-
-      - name: Keep repo active
-        run: |
-          echo "📅 Workflow executado com sucesso"
-          echo "🕐 Próxima execução em 6 horas"
+          echo "✅ Processo concluído em $(date)"
