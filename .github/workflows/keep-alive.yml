@@ -1,4 +1,4 @@
-name: Keep Streamlit App Alive
+name: Keep Projeto News Alive
 
 on:
   schedule:
@@ -9,22 +9,105 @@ jobs:
   wake-app:
     runs-on: ubuntu-latest
     steps:
-      - name: Wake up Streamlit App
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install Playwright
         run: |
-          echo "🔄 Acordando app Streamlit..."
+          pip install playwright
+          playwright install chromium
+      
+      - name: Login and Wake App
+        env:
+          APP_USER: ${{ secrets.NEWS_USER }}
+          APP_PASS: ${{ secrets.NEWS_PASS }}
+        run: |
+          python << 'EOF'
+          from playwright.sync_api import sync_playwright
+          import os
+          import time
           
-          # Faz requisição completa seguindo redirects
-          response=$(curl -L -s -o /dev/null -w "%{http_code}" \
-            -H "User-Agent: Mozilla/5.0" \
-            --max-time 30 \
-            https://projetonews-cupola.streamlit.app/)
+          user = os.environ['APP_USER']
+          password = os.environ['APP_PASS']
           
-          echo "📡 Status code: $response"
+          print(f"🔐 Iniciando login no Projeto News como: {user}")
           
-          if [ $response -ge 200 ] && [ $response -lt 400 ]; then
-            echo "✅ App acordado com sucesso!"
-          else
-            echo "⚠️ Status inesperado: $response"
-          fi
-          
-          echo "✅ Processo concluído em $(date)"
+          with sync_playwright() as p:
+              browser = p.chromium.launch(headless=True)
+              context = browser.new_context(
+                  user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                  viewport={'width': 1920, 'height': 1080}
+              )
+              page = context.new_page()
+              
+              try:
+                  print("🌐 Abrindo app Projeto News...")
+                  page.goto("https://projetonews-cupola.streamlit.app/", timeout=60000)
+                  
+                  print("⏳ Aguardando página carregar...")
+                  page.wait_for_load_state('networkidle', timeout=30000)
+                  time.sleep(8)
+                  
+                  print("🔍 Acessando iframe do app...")
+                  iframe = page.frame_locator('iframe[title="streamlitApp"]')
+                  
+                  print("📧 Preenchendo usuário (por aria-label)...")
+                  iframe.locator('input[aria-label="Usuário"]').fill(user, timeout=20000)
+                  print("   ✅ Usuário preenchido")
+                  time.sleep(2)
+                  
+                  print("🔑 Preenchendo senha (por aria-label)...")
+                  iframe.locator('input[aria-label="Senha"]').fill(password, timeout=20000)
+                  print("   ✅ Senha preenchida")
+                  time.sleep(2)
+                  
+                  print("🚀 Clicando no botão Entrar...")
+                  iframe.locator('button:has-text("Entrar")').click(timeout=10000)
+                  print("   ✅ Botão clicado")
+                  
+                  print("⏳ Aguardando app carregar completamente...")
+                  time.sleep(30)
+                  
+                  page_title = page.title()
+                  current_url = page.url
+                  
+                  print("=" * 50)
+                  print("✅ LOGIN REALIZADO COM SUCESSO!")
+                  print(f"📄 Título da página: {page_title}")
+                  print(f"🔗 URL atual: {current_url}")
+                  print("=" * 50)
+                  
+                  page.screenshot(path="success-news.png", full_page=True)
+                  print("📸 Screenshot completo salvo")
+                  
+                  time.sleep(5)
+                  
+                  print("🎉 Projeto News está ACORDADO e funcionando!")
+                  
+              except Exception as e:
+                  print("=" * 50)
+                  print(f"❌ ERRO: {e}")
+                  print("=" * 50)
+                  try:
+                      page.screenshot(path="error-news.png", full_page=True)
+                      with open("page-news.html", "w", encoding="utf-8") as f:
+                          f.write(page.content())
+                      print("📸 Screenshot de erro e HTML salvos")
+                  except:
+                      print("⚠️ Não foi possível salvar screenshot")
+              
+              finally:
+                  browser.close()
+                  print(f"✅ Processo finalizado: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+          EOF
+      
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-files-news
+          path: |
+            *-news.png
+            page-news.html
