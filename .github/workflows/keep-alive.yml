@@ -53,18 +53,21 @@ jobs:
                   print("🔍 Acessando iframe do app...")
                   iframe = page.frame_locator('iframe[title="streamlitApp"]')
                   
-                  print("📧 Preenchendo usuário (por aria-label)...")
-                  iframe.locator('input[aria-label="Usuário"]').fill(user, timeout=20000)
+                  print("📧 Preenchendo usuário...")
+                  iframe.locator('input[aria-label="Usuário"]').first.fill(user, timeout=20000)
                   print("   ✅ Usuário preenchido")
                   time.sleep(2)
-                  
-                  print("🔑 Preenchendo senha (por aria-label)...")
-                  iframe.locator('input[aria-label="Senha"]').fill(password, timeout=20000)
+
+                  print("🔑 Preenchendo senha...")
+                  # Pega todos os campos de senha e usa o primeiro (formulário de login)
+                  senha_fields = iframe.locator('input[type="password"][aria-label="Senha"]')
+                  senha_fields.first.fill(password, timeout=20000)
                   print("   ✅ Senha preenchida")
                   time.sleep(2)
-                  
-                  print("🚀 Clicando no botão Entrar...")
-                  iframe.locator('button:has-text("Entrar")').click(timeout=10000)
+
+                  print("🚀 Procurando botão Entrar...")
+                  # Usa o primeiro botão "Entrar" encontrado (do formulário de login)
+                  iframe.locator('button:has-text("Entrar")').first.click(timeout=10000)
                   print("   ✅ Botão clicado")
                   
                   print("⏳ Aguardando app carregar completamente...")
